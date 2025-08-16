@@ -19,11 +19,7 @@ class OpenAIProvider extends AbstractProvider implements Transcription
         $payloads = $this->preparePayloadWithDefaultModel($payload, $options);
         try {
             $response = $this->http
-                ->withToken($this->config['api_key'])
-                ->post(
-                    rtrim($this->config['base_url'], '/') . '/chat/completions',
-                    $payloads,
-                )
+                ->post('/chat/completions', $payloads)
                 ->json();
 
             return new AiResponse(success: true, data: $response);
@@ -43,10 +39,7 @@ class OpenAIProvider extends AbstractProvider implements Transcription
     {
         $payloads = $this->preparePayloadWithDefaultModel($payload, $options);
         try {
-            $response = $this->http
-                ->withToken($this->config['api_key'])
-                ->post('/embeddings', $payloads)
-                ->json();
+            $response = $this->http->post('/embeddings', $payloads)->json();
 
             return new AiResponse(success: true, data: $response);
         } catch (\Throwable $e) {
@@ -65,10 +58,7 @@ class OpenAIProvider extends AbstractProvider implements Transcription
     {
         $payload = array_merge(['input' => $input], $options);
 
-        return $this->http
-            ->withToken($this->config['api_key'])
-            ->post('/moderations', $payload)
-            ->json();
+        return $this->http->post('/moderations', $payload)->json();
     }
 
     /**

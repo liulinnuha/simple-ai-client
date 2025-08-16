@@ -53,6 +53,8 @@ return [
                 'GEMINI_BASE_URL',
                 'https://generativelanguage.googleapis.com/v1beta/',
             ),
+            'default_model' => 'gemini-pro',
+            'embedding_model' => 'gemini-embedding-001',
         ],
         'deepseek' => [
             'api_key' => env('DEEPSEEK_API_KEY'),

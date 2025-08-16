@@ -15,10 +15,22 @@ abstract class AbstractProvider implements AiProviderInterface
     public function __construct(array $config = [])
     {
         $this->config = $config;
-        $this->http = HttpHelper::client($config['http'])
+        $this->http = $this->setupHttpClient($config);
+        $this->defaultModel = $config['default_model'] ?? null;
+    }
+
+    /**
+     * Set up the HTTP client with proper authentication
+     * This can be overridden by specific providers to implement different auth methods
+     *
+     * @param array $config
+     * @return \Illuminate\Http\Client\PendingRequest
+     */
+    protected function setupHttpClient(array $config)
+    {
+        return HttpHelper::client($config['http'] ?? [])
             ->withToken($config['api_key'])
             ->baseUrl(rtrim($config['base_url'], '/'));
-        $this->defaultModel = $config['default_model'] ?? null;
     }
 
     /**
